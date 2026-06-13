@@ -3209,7 +3209,6 @@
                 const [movedItem] = musicData.splice(fromIndex, 1);
                 musicData.splice(toIndex, 0, movedItem);
 
-                // Update current track index if needed
                 if (currentTrackIndex === fromIndex) {
                     currentTrackIndex = toIndex;
                 } else if (currentTrackIndex > fromIndex && currentTrackIndex <= toIndex) {
@@ -3218,7 +3217,6 @@
                     currentTrackIndex++;
                 }
 
-                // Re-render playlist
                 renderPlaylist();
 
                 showToast('Playlist order updated', 'success');
@@ -3234,7 +3232,6 @@
             });
         }
 
-        // Handle keyboard shortcuts
         function handleKeyboardShortcuts(e) {
             switch (e.key) {
                 case ' ':
@@ -3316,8 +3313,7 @@
                     break;
             }
         }
-
-        // Save to localStorage
+        
         function saveToLocalStorage() {
             const playerState = {
                 theme: document.body.classList.contains('light-theme') ? 'light' : 'dark',
@@ -3333,47 +3329,39 @@
             localStorage.setItem('harmonyPlayerState', JSON.stringify(playerState));
         }
 
-        // Load from localStorage
         function loadFromLocalStorage() {
             const savedState = localStorage.getItem('harmonyPlayerState');
             if (savedState) {
                 try {
                     const state = JSON.parse(savedState);
 
-                    // Apply theme
                     if (state.theme === 'light') {
                         document.body.classList.add('light-theme');
                         themeToggle.querySelector('i').className = 'fas fa-sun';
                     }
 
-                    // Apply volume
                     if (state.volume) {
                         audioPlayer.volume = state.volume;
                         updateVolumeSlider();
                         updateVolumeIcon(state.volume);
                     }
 
-                    // Apply shuffle state
                     if (state.isShuffled) {
                         toggleShuffle();
                     }
 
-                    // Apply repeat state
                     if (state.isRepeating) {
                         toggleRepeat();
                     }
 
-                    // Apply music data
                     if (state.musicData) {
                         musicData = state.musicData;
                     }
-
-                    // Apply playlists
+                    
                     if (state.playlists) {
                         playlists = state.playlists;
                     }
 
-                    // Apply total play time
                     if (state.totalPlayTime) {
                         totalPlayTime = state.totalPlayTime;
                         updateTotalPlayTime();
@@ -3385,17 +3373,14 @@
             }
         }
 
-        // Initialize the player when the page loads
         window.addEventListener('DOMContentLoaded', initPlayer);
 
-        // Listen for fullscreen change
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
                 fullScreenBtn.innerHTML = '<i class="fas fa-expand"></i> Fullscreen';
             }
         });
 
-        // Close modals when clicking outside
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 hideModal(e.target);
